@@ -49,7 +49,7 @@ func getListsFromFile(file string) ([]int, []int) {
 func day1Part1() int {
 	result := 0
 
-	list1, list2 := getListsFromFile("list.txt")
+	list1, list2 := getListsFromFile("input.txt")
 
 	sort.Slice(list1, func(i, j int) bool {
 		return list1[i] < list1[j]
@@ -69,7 +69,7 @@ func day1Part1() int {
 func day1Part2() int {
 	result := 0
 
-	list1, list2 := getListsFromFile("list.txt")
+	list1, list2 := getListsFromFile("input.txt")
 
 	list2Map := make(map[int]int)
 
