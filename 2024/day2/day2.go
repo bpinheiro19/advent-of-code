@@ -42,6 +42,57 @@ func getListFromFile(file string) [][]string {
 	return list
 }
 
+func isReportSafe(line []string) bool {
+
+	safe := true
+	increasing := true
+	decreasing := true
+
+	for i := 0; i < len(line)-1; i++ {
+
+		num1, err := strconv.Atoi(line[i])
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		num2, err := strconv.Atoi(line[i+1])
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if abs(num2-num1) > 3 {
+			safe = false
+			break
+		}
+
+		if num1 == num2 {
+			safe = false
+			break
+
+		} else if num1 < num2 {
+			decreasing = false
+
+			if !increasing {
+				safe = false
+				break
+			}
+
+		} else if num1 > num2 {
+			increasing = false
+
+			if !decreasing {
+				safe = false
+				break
+			}
+		}
+
+	}
+
+	return safe
+}
+
 func day2Part1() int {
 
 	result := 0
@@ -50,63 +101,49 @@ func day2Part1() int {
 
 	for _, line := range list {
 
-		safe := true
-		increasing := true
-		decreasing := true
-
-		for i := 0; i < len(line)-1; i++ {
-
-			num1, err := strconv.Atoi(line[i])
-
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			num2, err := strconv.Atoi(line[i+1])
-
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			if abs(num2-num1) > 3 {
-				safe = false
-				break
-			}
-
-			if num1 == num2 {
-				safe = false
-				break
-
-			} else if num1 < num2 {
-				decreasing = false
-
-				if !increasing {
-					safe = false
-					break
-				}
-
-			} else if num1 > num2 {
-				increasing = false
-
-				if !decreasing {
-					safe = false
-					break
-				}
-			}
-
-		}
+		safe := isReportSafe(line)
 
 		if safe {
-			result += 1
+			result++
 		}
-
 	}
 
 	return result
 }
 
 func day2Part2() int {
-	return 0
+
+	result := 0
+
+	list := getListFromFile("input.txt")
+
+	for _, line := range list {
+
+		safe := isReportSafe(line)
+
+		if safe {
+			result++
+
+		} else if tryProblemDampener(line) {
+			result++
+		}
+	}
+
+	return result
+}
+
+func tryProblemDampener(line []string) bool {
+
+	safe := false
+	for i := 0; i < len(line); i++ {
+		newLine := make([]string, len(line))
+		copy(newLine, line)
+		safe = isReportSafe(append(newLine[:i], newLine[i+1:]...))
+		if safe {
+			break
+		}
+	}
+	return safe
 }
 
 func main() {
