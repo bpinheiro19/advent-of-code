@@ -42,21 +42,7 @@ func createByteArray() [][]byte {
 
 func day4Part1() int {
 	result := 0
-
 	byteArr := createByteArray()
-
-	for _, ele := range byteArr {
-		fmt.Println(string(ele))
-	}
-
-	result = trySolve(byteArr)
-
-	return result
-}
-
-func trySolve(byteArr [][]byte) int {
-
-	count := 0
 
 	lenI := len(byteArr)
 	for i := 0; i < lenI; i++ {
@@ -71,14 +57,15 @@ func trySolve(byteArr [][]byte) int {
 						if (inBounds(i+a, j+b, lenI, lenJ) && isM(byteArr[i+a][j+b])) &&
 							(inBounds(i+(a*2), j+(b*2), lenI, lenJ) && isA(byteArr[i+(a*2)][j+(b*2)])) &&
 							(inBounds(i+(a*3), j+(b*3), lenI, lenJ) && isS(byteArr[i+(a*3)][j+(b*3)])) {
-							count++
+							result++
 						}
 					}
 				}
 			}
 		}
 	}
-	return count
+
+	return result
 }
 
 func inBounds(i int, j int, limitI int, limitJ int) bool {
@@ -88,8 +75,62 @@ func inBounds(i int, j int, limitI int, limitJ int) bool {
 	return false
 }
 
+/*
+Possible solutions
+M.M M.S S.M S.S
+.A. .A. .A. .A.
+S.S M.S S.M M.M
+
+-1,-1  -1,1
+
+	0,0
+
+1,-1    1,1
+*/
 func day4Part2() int {
 	result := 0
+
+	byteArr := createByteArray()
+
+	lenI := len(byteArr)
+	for i := 0; i < lenI; i++ {
+		lenJ := len(byteArr[i])
+		for j := 0; j < lenJ; j++ {
+
+			if isA(byteArr[i][j]) {
+
+				if (inBounds(i-1, j-1, lenI, lenJ) && isM(byteArr[i-1][j-1])) &&
+					(inBounds(i-1, j+1, lenI, lenJ) && isM(byteArr[i-1][j+1])) &&
+					(inBounds(i+1, j-1, lenI, lenJ) && isS(byteArr[i+1][j-1])) &&
+					(inBounds(i+1, j+1, lenI, lenJ) && isS(byteArr[i+1][j+1])) {
+					result++
+				}
+
+				if (inBounds(i-1, j-1, lenI, lenJ) && isM(byteArr[i-1][j-1])) &&
+					(inBounds(i-1, j+1, lenI, lenJ) && isS(byteArr[i-1][j+1])) &&
+					(inBounds(i+1, j-1, lenI, lenJ) && isM(byteArr[i+1][j-1])) &&
+					(inBounds(i+1, j+1, lenI, lenJ) && isS(byteArr[i+1][j+1])) {
+					result++
+				}
+
+				if (inBounds(i-1, j-1, lenI, lenJ) && isS(byteArr[i-1][j-1])) &&
+					(inBounds(i-1, j+1, lenI, lenJ) && isM(byteArr[i-1][j+1])) &&
+					(inBounds(i+1, j-1, lenI, lenJ) && isS(byteArr[i+1][j-1])) &&
+					(inBounds(i+1, j+1, lenI, lenJ) && isM(byteArr[i+1][j+1])) {
+					result++
+				}
+
+				if (inBounds(i-1, j-1, lenI, lenJ) && isS(byteArr[i-1][j-1])) &&
+					(inBounds(i-1, j+1, lenI, lenJ) && isS(byteArr[i-1][j+1])) &&
+					(inBounds(i+1, j-1, lenI, lenJ) && isM(byteArr[i+1][j-1])) &&
+					(inBounds(i+1, j+1, lenI, lenJ) && isM(byteArr[i+1][j+1])) {
+					result++
+				}
+
+			}
+		}
+	}
+
 	return result
 }
 
@@ -138,7 +179,7 @@ func isS(b byte) bool {
 
 func main() {
 
-	fmt.Println("Day4 Part1 Result:", day4Part1())
+	//fmt.Println("Day4 Part1 Result:", day4Part1())
 
 	fmt.Println("Day4 Part2 Result:", day4Part2())
 
