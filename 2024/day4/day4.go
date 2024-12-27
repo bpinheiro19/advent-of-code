@@ -179,7 +179,7 @@ func isS(b byte) bool {
 
 func main() {
 
-	//fmt.Println("Day4 Part1 Result:", day4Part1())
+	fmt.Println("Day4 Part1 Result:", day4Part1())
 
 	fmt.Println("Day4 Part2 Result:", day4Part2())
 
