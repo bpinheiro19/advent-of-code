@@ -49,8 +49,34 @@ func stringToInt(str string) int {
 	return num
 }
 
-func day5Part1() int {
-	result := 0
+func checkOrderViolation(numList []int, helperMap map[int][]int) bool {
+
+	for i := 0; i < len(numList); i++ {
+		for n := i + 1; n < len(numList); n++ {
+			if isInArray(helperMap[numList[i]], numList[n]) {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func isInArray(arr []int, i int) bool {
+	return slices.Index(arr, i) != -1
+}
+
+func insertIntoArray(arr []int, i int, e int) []int {
+	return append(arr[:i], append([]int{e}, arr[i:]...)...)
+}
+
+func removeFromArray(arr []int, i int) []int {
+	return append(arr[:i], arr[i+1:]...)
+}
+
+func day5() (int, int) {
+	result1 := 0
+	result2 := 0
 
 	list := getStringListFromFile()
 
@@ -70,43 +96,42 @@ func day5Part1() int {
 			}
 
 			if !checkOrderViolation(numList, helperMap) {
-				result += numList[(len(numList) / 2)]
+				result1 += numList[(len(numList) / 2)]
+			} else {
+				result2 += day5Part2(numList, helperMap)
 			}
 
 		}
 
 	}
 
-	return result
+	return result1, result2
 }
 
-func checkOrderViolation(numList []int, helperMap map[int][]int) bool {
+func day5Part2(numList []int, helperMap map[int][]int) int {
+	result := 0
 
 	for i := 0; i < len(numList); i++ {
 		for n := i + 1; n < len(numList); n++ {
 			if isInArray(helperMap[numList[i]], numList[n]) {
-				return true
+				e := numList[n]
+				removeFromArray(numList, n)
+				insertIntoArray(numList, i, e)
+				i = -1
+				n = 0
+				break
 			}
 		}
 	}
-
-	return false
-}
-
-func isInArray(arr []int, i int) bool {
-	return slices.Index(arr, i) != -1
-}
-
-func day5Part2() int {
-	result := 0
+	result += numList[(len(numList) / 2)]
 
 	return result
 }
 
 func main() {
 
-	fmt.Println("Day5 Part1 Result:", day5Part1())
-
-	fmt.Println("Day5 Part2 Result:", day5Part2())
+	part1, part2 := day5()
+	fmt.Println("Day5 Part1 Result:", part1)
+	fmt.Println("Day5 Part2 Result:", part2)
 
 }
