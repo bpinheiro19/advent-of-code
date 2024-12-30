@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"slices"
 	"strings"
 )
 
@@ -34,6 +35,8 @@ const (
 	RIGHT
 )
 
+const MAX_ATTEMPTS int = 10000
+
 func getStringListFromFile() []string {
 
 	input, err := os.ReadFile("input.txt")
@@ -45,11 +48,8 @@ func getStringListFromFile() []string {
 	return strings.Fields(string(input))
 }
 
-func hasObstacle(b byte) bool {
-	if b == 35 {
-		return true
-	}
-	return false
+func charIsObstacle(b byte) bool {
+	return b == 35
 }
 
 func rotateChar90(char byte) byte {
@@ -97,10 +97,14 @@ func getDxDy(dir GuardDirection) (int, int) {
 	return dx, dy
 }
 
+func charIsGuard(c byte) bool {
+	return c == 94 || c == 62 || c == 60 || c == 118
+}
+
 func getGuardPosition(list []string) (int, int) {
 	for i := 0; i < len(list); i++ {
 		for n := 0; n < len(list[i]); n++ {
-			if list[i][n] == 94 || list[i][n] == 62 || list[i][n] == 60 || list[i][n] == 118 {
+			if charIsGuard(list[i][n]) {
 				return i, n
 			}
 		}
@@ -108,19 +112,8 @@ func getGuardPosition(list []string) (int, int) {
 	return -1, -1
 }
 
-func inBounds(i int, j int, limitI int, limitJ int) bool {
-	if i >= 0 && i < limitI && j >= 0 && j < limitJ {
-		return true
-	}
-	return false
-}
-
-func insertIntoArray(arr []byte, i int, e byte) []byte {
-	return append(arr[:i], append([]byte{e}, arr[i:]...)...)
-}
-
-func removeFromArray(arr []byte, i int) []byte {
-	return append(arr[:i], arr[i+1:]...)
+func outOfBounds(i int, j int, limitI int, limitJ int) bool {
+	return i < 0 || i >= limitI || j < 0 || j >= limitJ
 }
 
 func printBoard(list []string) {
@@ -143,48 +136,73 @@ func findTotalMoves(list []string) int {
 	return moves
 }
 
-func day6Part1() int {
-
-	list := getStringListFromFile()
+func moveGuard(list []string) int {
+	attempts := 0
 
 	gx, gy := getGuardPosition(list)
 	dir := getDir(list[gx][gy])
 	dx, dy := getDxDy(dir)
 
-	for inBounds(gx+dx, gy+dy, len(list), len(list[gx])) {
+	for !outOfBounds(gx+dx, gy+dy, len(list), len(list[gx])) && attempts < MAX_ATTEMPTS {
 
-		if hasObstacle(list[gx+dx][gy+dy]) {
+		if charIsObstacle(list[gx+dx][gy+dy]) {
 
 			guard := rotateChar90(list[gx][gy])
+			dir = getDir(list[gx][gy])
+			dx, dy = getDxDy(dir)
 
-			list[gx] = string(removeFromArray([]byte(list[gx]), gy))
-			list[gx] = string(insertIntoArray([]byte(list[gx]), gy, guard))
+			list[gx] = string(slices.Replace([]byte(list[gx]), gy, gy+1, guard))
 
 		} else {
+
 			guard := list[gx][gy]
 
-			list[gx] = string(removeFromArray([]byte(list[gx]), gy))
-			list[gx] = string(insertIntoArray([]byte(list[gx]), gy, 88))
+			list[gx] = string(slices.Replace([]byte(list[gx]), gy, gy+1, 88))
+			list[gx+dx] = string(slices.Replace([]byte(list[gx+dx]), gy+dy, gy+dy+1, guard))
 
-			list[gx+dx] = string(removeFromArray([]byte(list[gx+dx]), gy+dy))
-			list[gx+dx] = string(insertIntoArray([]byte(list[gx+dx]), gy+dy, guard))
+			gx, gy = gx+dx, gy+dy
+
 		}
 
-		gx, gy = getGuardPosition(list)
-		dir = getDir(list[gx][gy])
-		dx, dy = getDxDy(dir)
+		attempts++
 	}
 
-	list[gx] = string(removeFromArray([]byte(list[gx]), gy))
-	list[gx] = string(insertIntoArray([]byte(list[gx]), gy, 88))
+	list[gx] = string(slices.Replace([]byte(list[gx]), gy, gy+1, 88))
 
+	return attempts
+}
+
+func day6Part1() int {
+	list := getStringListFromFile()
+	moveGuard(list)
 	return findTotalMoves(list)
 }
 
 func day6Part2() int {
-	result := 0
+	positions := 0
 
-	return result
+	list := getStringListFromFile()
+
+	for i := 0; i < len(list); i++ {
+		for n := 0; n < len(list[i]); n++ {
+
+			if !charIsGuard(list[i][n]) && !charIsObstacle(list[i][n]) {
+
+				newList := make([]string, len(list))
+				copy(newList, list)
+
+				newList[i] = string(slices.Replace([]byte(list[i]), n, n+1, 35))
+
+				attempts := moveGuard(newList)
+
+				if attempts == MAX_ATTEMPTS {
+					positions++
+				}
+			}
+		}
+	}
+
+	return positions
 }
 
 func main() {
