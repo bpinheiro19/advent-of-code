@@ -77,6 +77,10 @@ func tryToSolve(a int, b []int, total int) int {
 		return a
 	}
 
+	if a > total {
+		return 0
+	}
+
 	sum := tryToSolve(a+b[0], b[1:], total)
 	sum2 := tryToSolve(a*b[0], b[1:], total)
 
@@ -98,7 +102,54 @@ func canBeSolved(list []int, total int) bool {
 func day7Part2() int {
 	result := 0
 
+	list := createIntList()
+
+	for i := 0; i < len(list); i++ {
+		total := list[i][0]
+
+		if canBeSolved2(list[i], total) {
+			result += total
+		}
+	}
+
 	return result
+}
+
+func concatenateTwoInts(a, b int) int {
+	return stringToInt(strings.Join([]string{strconv.Itoa(a), strconv.Itoa(b)}, ""))
+}
+
+func tryToSolve2(a int, b []int, total int) int {
+
+	if len(b) == 0 {
+		return a
+	}
+
+	if a > total {
+		return 0
+	}
+
+	sum := tryToSolve2(a+b[0], b[1:], total)
+	sum2 := tryToSolve2(a*b[0], b[1:], total)
+	sum3 := tryToSolve2(concatenateTwoInts(a, b[0]), b[1:], total)
+
+	if sum == total {
+		return sum
+	}
+
+	if sum2 == total {
+		return sum2
+	}
+
+	if sum3 == total {
+		return sum3
+	}
+
+	return 0
+}
+
+func canBeSolved2(list []int, total int) bool {
+	return tryToSolve2(list[1], list[2:], total) == total
 }
 
 func main() {
