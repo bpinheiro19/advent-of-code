@@ -1,48 +1,20 @@
-package main
+package day3
 
 import (
+	"aoc2024/utils"
 	"fmt"
-	"log"
-	"os"
-	"regexp"
-	"strconv"
 	"strings"
 )
 
-func getStringFromFile(file string) []string {
-
-	input, err := os.ReadFile(file)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return strings.Fields(string(input))
-}
-
-func checkRegEx(input string, regex string) []string {
-	pattern := regexp.MustCompile(regex)
-	return pattern.FindAllString(input, -1)
-}
-
 func multiplyValues(mul string) int {
 	result := 0
-	sumList := checkRegEx(mul, `(\d*\,\d*)`)
+	sumList := utils.CheckRegEx(mul, `(\d*\,\d*)`)
 
 	for _, val := range sumList {
 		splitSumList := strings.Split(val, ",")
 
-		num1, err := strconv.Atoi(splitSumList[0])
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		num2, err := strconv.Atoi(splitSumList[1])
-
-		if err != nil {
-			log.Fatal(err)
-		}
+		num1 := utils.StringToInt(splitSumList[0])
+		num2 := utils.StringToInt(splitSumList[1])
 
 		result += num1 * num2
 	}
@@ -50,13 +22,13 @@ func multiplyValues(mul string) int {
 	return result
 }
 
-func day3Part1() int {
+func day3Part1(filename string) int {
 	result := 0
 
-	list := getStringFromFile("input.txt")
+	list := utils.GetStringListFromFile(filename)
 
 	for _, line := range list {
-		mulList := checkRegEx(line, `(mul\(\d*,\d*\))`)
+		mulList := utils.CheckRegEx(line, `(mul\(\d*,\d*\))`)
 
 		for _, mul := range mulList {
 			result += multiplyValues(mul)
@@ -67,15 +39,15 @@ func day3Part1() int {
 	return result
 }
 
-func day3Part2() int {
+func day3Part2(filename string) int {
 	result := 0
 	mulEnabled := true
 
-	list := getStringFromFile("input.txt")
+	list := utils.GetStringListFromFile(filename)
 
 	for _, line := range list {
 
-		firstList := checkRegEx(line, `(mul\(\d*,\d*\))|(do\(\))|(don't\(\))`)
+		firstList := utils.CheckRegEx(line, `(mul\(\d*,\d*\))|(do\(\))|(don't\(\))`)
 
 		for _, val := range firstList {
 
@@ -89,18 +61,13 @@ func day3Part2() int {
 					result += multiplyValues(val)
 				}
 			}
-
 		}
-
 	}
 
 	return result
 }
 
-func main() {
-
-	fmt.Println("Day3 Part1 Result:", day3Part1())
-
-	fmt.Println("Day3 Part2 Result:", day3Part2())
-
+func Run(filename string) {
+	fmt.Println("Day3 Part1 Result:", day3Part1(filename))
+	fmt.Println("Day3 Part2 Result:", day3Part2(filename))
 }

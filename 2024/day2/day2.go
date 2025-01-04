@@ -1,20 +1,13 @@
-package main
+package day2
 
 import (
+	"aoc2024/utils"
 	"bufio"
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"strings"
 )
-
-func abs(x int) int {
-	if x > 0 {
-		return x
-	}
-	return -x
-}
 
 func getListFromFile(file string) [][]string {
 
@@ -50,19 +43,10 @@ func isReportSafe(line []string) bool {
 
 	for i := 0; i < len(line)-1; i++ {
 
-		num1, err := strconv.Atoi(line[i])
+		num1 := utils.StringToInt(line[i])
+		num2 := utils.StringToInt(string(line[i+1]))
 
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		num2, err := strconv.Atoi(line[i+1])
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		if abs(num2-num1) > 3 {
+		if utils.Abs(num2-num1) > 3 {
 			safe = false
 			break
 		}
@@ -87,17 +71,13 @@ func isReportSafe(line []string) bool {
 				break
 			}
 		}
-
 	}
-
 	return safe
 }
 
-func day2Part1() int {
-
+func day2Part1(filename string) int {
 	result := 0
-
-	list := getListFromFile("input.txt")
+	list := getListFromFile(filename)
 
 	for _, line := range list {
 
@@ -111,11 +91,9 @@ func day2Part1() int {
 	return result
 }
 
-func day2Part2() int {
-
+func day2Part2(filename string) int {
 	result := 0
-
-	list := getListFromFile("input.txt")
+	list := getListFromFile(filename)
 
 	for _, line := range list {
 
@@ -123,7 +101,6 @@ func day2Part2() int {
 
 		if safe {
 			result++
-
 		} else if tryProblemDampener(line) {
 			result++
 		}
@@ -133,7 +110,6 @@ func day2Part2() int {
 }
 
 func tryProblemDampener(line []string) bool {
-
 	safe := false
 	for i := 0; i < len(line); i++ {
 		newLine := make([]string, len(line))
@@ -146,10 +122,7 @@ func tryProblemDampener(line []string) bool {
 	return safe
 }
 
-func main() {
-
-	fmt.Println("Day2 Part1 Result:", day2Part1())
-
-	fmt.Println("Day2 Part2 Result:", day2Part2())
-
+func Run(filename string) {
+	fmt.Println("Day2 Part1 Result:", day2Part1(filename))
+	fmt.Println("Day2 Part2 Result:", day2Part2(filename))
 }
