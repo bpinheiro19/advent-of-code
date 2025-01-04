@@ -1,34 +1,13 @@
-package main
+package day7
 
 import (
+	"aoc2024/utils"
 	"fmt"
 	"log"
-	"os"
-	"strconv"
-	"strings"
 )
 
-func getStringListFromFile() []string {
-
-	input, err := os.ReadFile("input.txt")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return strings.Fields(string(input))
-}
-
-func stringToInt(str string) int {
-	num, err := strconv.Atoi(str)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return num
-}
-
-func createIntList() [][]int {
-	list := getStringListFromFile()
+func createIntList(filename string) [][]int {
+	list := utils.GetStringListFromFile(filename)
 
 	newList := make([][]int, 0)
 	tempList := make([]int, 0)
@@ -39,10 +18,10 @@ func createIntList() [][]int {
 				newList = append(newList, tempList)
 			}
 			tempList = make([]int, 0)
-			tempList = append(tempList, stringToInt(str[0:len(str)-1]))
+			tempList = append(tempList, utils.StringToInt(str[0:len(str)-1]))
 
 		} else {
-			tempList = append(tempList, stringToInt(str))
+			tempList = append(tempList, utils.StringToInt(str))
 		}
 
 	}
@@ -55,15 +34,15 @@ func createIntList() [][]int {
 	return newList
 }
 
-func day7Part1() int {
+func day7Part1(filename string) int {
 	result := 0
 
-	list := createIntList()
+	list := createIntList(filename)
 
 	for i := 0; i < len(list); i++ {
 		total := list[i][0]
 
-		if canBeSolved(list[i], total) {
+		if canBeSolvedPart1(list[i], total) {
 			result += total
 		}
 	}
@@ -71,7 +50,7 @@ func day7Part1() int {
 	return result
 }
 
-func tryToSolve(a int, b []int, total int) int {
+func tryToSolvePart1(a int, b []int, total int) int {
 
 	if len(b) == 0 {
 		return a
@@ -81,8 +60,8 @@ func tryToSolve(a int, b []int, total int) int {
 		return 0
 	}
 
-	sum := tryToSolve(a+b[0], b[1:], total)
-	sum2 := tryToSolve(a*b[0], b[1:], total)
+	sum := tryToSolvePart1(a+b[0], b[1:], total)
+	sum2 := tryToSolvePart1(a*b[0], b[1:], total)
 
 	if sum == total {
 		return sum
@@ -95,19 +74,19 @@ func tryToSolve(a int, b []int, total int) int {
 	return 0
 }
 
-func canBeSolved(list []int, total int) bool {
-	return tryToSolve(list[1], list[2:], total) == total
+func canBeSolvedPart1(list []int, total int) bool {
+	return tryToSolvePart1(list[1], list[2:], total) == total
 }
 
-func day7Part2() int {
+func day7Part2(filename string) int {
 	result := 0
 
-	list := createIntList()
+	list := createIntList(filename)
 
 	for i := 0; i < len(list); i++ {
 		total := list[i][0]
 
-		if canBeSolved2(list[i], total) {
+		if canBeSolvedPart2(list[i], total) {
 			result += total
 		}
 	}
@@ -115,11 +94,7 @@ func day7Part2() int {
 	return result
 }
 
-func concatenateTwoInts(a, b int) int {
-	return stringToInt(strings.Join([]string{strconv.Itoa(a), strconv.Itoa(b)}, ""))
-}
-
-func tryToSolve2(a int, b []int, total int) int {
+func tryToSolvePart2(a int, b []int, total int) int {
 
 	if len(b) == 0 {
 		return a
@@ -129,9 +104,9 @@ func tryToSolve2(a int, b []int, total int) int {
 		return 0
 	}
 
-	sum := tryToSolve2(a+b[0], b[1:], total)
-	sum2 := tryToSolve2(a*b[0], b[1:], total)
-	sum3 := tryToSolve2(concatenateTwoInts(a, b[0]), b[1:], total)
+	sum := tryToSolvePart2(a+b[0], b[1:], total)
+	sum2 := tryToSolvePart2(a*b[0], b[1:], total)
+	sum3 := tryToSolvePart2(utils.ConcatenateTwoInts(a, b[0]), b[1:], total)
 
 	if sum == total {
 		return sum
@@ -148,13 +123,11 @@ func tryToSolve2(a int, b []int, total int) int {
 	return 0
 }
 
-func canBeSolved2(list []int, total int) bool {
-	return tryToSolve2(list[1], list[2:], total) == total
+func canBeSolvedPart2(list []int, total int) bool {
+	return tryToSolvePart2(list[1], list[2:], total) == total
 }
 
-func main() {
-
-	fmt.Println("Day7 Part1 Result:", day7Part1())
-	fmt.Println("Day7 Part2 Result:", day7Part2())
-
+func Run(filename string) {
+	fmt.Println("Day7 Part1 Result:", day7Part1(filename))
+	fmt.Println("Day7 Part2 Result:", day7Part2(filename))
 }

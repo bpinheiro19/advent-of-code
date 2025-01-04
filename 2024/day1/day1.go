@@ -1,40 +1,21 @@
-package main
+package day1
 
 import (
+	"aoc2024/utils"
 	"fmt"
-	"log"
-	"os"
 	"sort"
-	"strconv"
-	"strings"
 )
 
-func abs(x int) int {
-	if x > 0 {
-		return x
-	}
-	return -x
-}
-
-func getListsFromFile(file string) ([]int, []int) {
+func createNumLists(filename string) ([]int, []int) {
 
 	list1 := make([]int, 1)
 	list2 := make([]int, 1)
 
-	input, err := os.ReadFile(file)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	strInput := strings.Fields(string(input))
+	strInput := utils.GetStringListFromFile(filename)
 
 	for i, v := range strInput {
 
-		num, err := strconv.Atoi(v)
-		if err != nil {
-			log.Fatal(err)
-		}
+		num := utils.StringToInt(v)
 
 		if i%2 == 0 {
 			list1 = append(list1, num)
@@ -46,10 +27,10 @@ func getListsFromFile(file string) ([]int, []int) {
 	return list1, list2
 }
 
-func day1Part1() int {
+func day1Part1(filename string) int {
 	result := 0
 
-	list1, list2 := getListsFromFile("input.txt")
+	list1, list2 := createNumLists(filename)
 
 	sort.Slice(list1, func(i, j int) bool {
 		return list1[i] < list1[j]
@@ -60,16 +41,16 @@ func day1Part1() int {
 	})
 
 	for i, val := range list1 {
-		result += abs(val - list2[i])
+		result += utils.Abs(val - list2[i])
 	}
 
 	return result
 }
 
-func day1Part2() int {
+func day1Part2(filename string) int {
 	result := 0
 
-	list1, list2 := getListsFromFile("input.txt")
+	list1, list2 := createNumLists(filename)
 
 	list2Map := make(map[int]int)
 
@@ -88,12 +69,8 @@ func day1Part2() int {
 	return result
 }
 
-func main() {
+func Run(filename string) {
 
-	day1Part1Result := day1Part1()
-	fmt.Println("Day1 Part1 Result:", day1Part1Result)
-
-	day1Part2Result := day1Part2()
-	fmt.Println("Day1 Part2 Result:", day1Part2Result)
-
+	fmt.Println("Day1 Part1 Result:", day1Part1(filename))
+	fmt.Println("Day1 Part2 Result:", day1Part2(filename))
 }

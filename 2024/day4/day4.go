@@ -1,25 +1,13 @@
-package main
+package day4
 
 import (
+	"aoc2024/utils"
 	"fmt"
-	"log"
-	"os"
 )
 
-func getInputFromFile(file string) []byte {
+func createByteArray(filename string) [][]byte {
 
-	input, err := os.ReadFile(file)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return input
-}
-
-func createByteArray() [][]byte {
-
-	input := getInputFromFile("input.txt")
+	input := utils.GetByteListFromFile(filename)
 
 	byteArr := make([][]byte, 0)
 	lineArr := make([]byte, 0)
@@ -40,9 +28,9 @@ func createByteArray() [][]byte {
 	return byteArr
 }
 
-func day4Part1() int {
+func day4Part1(filename string) int {
 	result := 0
-	byteArr := createByteArray()
+	byteArr := createByteArray(filename)
 
 	lenI := len(byteArr)
 	for i := 0; i < lenI; i++ {
@@ -54,9 +42,9 @@ func day4Part1() int {
 				for a := -1; a < 2; a++ {
 					for b := -1; b < 2; b++ {
 
-						if (inBounds(i+a, j+b, lenI, lenJ) && isM(byteArr[i+a][j+b])) &&
-							(inBounds(i+(a*2), j+(b*2), lenI, lenJ) && isA(byteArr[i+(a*2)][j+(b*2)])) &&
-							(inBounds(i+(a*3), j+(b*3), lenI, lenJ) && isS(byteArr[i+(a*3)][j+(b*3)])) {
+						if (utils.InBounds(i+a, j+b, lenI, lenJ) && isM(byteArr[i+a][j+b])) &&
+							(utils.InBounds(i+(a*2), j+(b*2), lenI, lenJ) && isA(byteArr[i+(a*2)][j+(b*2)])) &&
+							(utils.InBounds(i+(a*3), j+(b*3), lenI, lenJ) && isS(byteArr[i+(a*3)][j+(b*3)])) {
 							result++
 						}
 					}
@@ -64,15 +52,7 @@ func day4Part1() int {
 			}
 		}
 	}
-
 	return result
-}
-
-func inBounds(i int, j int, limitI int, limitJ int) bool {
-	if i >= 0 && i < limitI && j >= 0 && j < limitJ {
-		return true
-	}
-	return false
 }
 
 /*
@@ -87,10 +67,10 @@ S.S M.S S.M M.M
 
 1,-1    1,1
 */
-func day4Part2() int {
-	result := 0
 
-	byteArr := createByteArray()
+func day4Part2(filename string) int {
+	result := 0
+	byteArr := createByteArray(filename)
 
 	lenI := len(byteArr)
 	for i := 0; i < lenI; i++ {
@@ -99,38 +79,36 @@ func day4Part2() int {
 
 			if isA(byteArr[i][j]) {
 
-				if (inBounds(i-1, j-1, lenI, lenJ) && isM(byteArr[i-1][j-1])) &&
-					(inBounds(i-1, j+1, lenI, lenJ) && isM(byteArr[i-1][j+1])) &&
-					(inBounds(i+1, j-1, lenI, lenJ) && isS(byteArr[i+1][j-1])) &&
-					(inBounds(i+1, j+1, lenI, lenJ) && isS(byteArr[i+1][j+1])) {
+				if (utils.InBounds(i-1, j-1, lenI, lenJ) && isM(byteArr[i-1][j-1])) &&
+					(utils.InBounds(i-1, j+1, lenI, lenJ) && isM(byteArr[i-1][j+1])) &&
+					(utils.InBounds(i+1, j-1, lenI, lenJ) && isS(byteArr[i+1][j-1])) &&
+					(utils.InBounds(i+1, j+1, lenI, lenJ) && isS(byteArr[i+1][j+1])) {
 					result++
 				}
 
-				if (inBounds(i-1, j-1, lenI, lenJ) && isM(byteArr[i-1][j-1])) &&
-					(inBounds(i-1, j+1, lenI, lenJ) && isS(byteArr[i-1][j+1])) &&
-					(inBounds(i+1, j-1, lenI, lenJ) && isM(byteArr[i+1][j-1])) &&
-					(inBounds(i+1, j+1, lenI, lenJ) && isS(byteArr[i+1][j+1])) {
+				if (utils.InBounds(i-1, j-1, lenI, lenJ) && isM(byteArr[i-1][j-1])) &&
+					(utils.InBounds(i-1, j+1, lenI, lenJ) && isS(byteArr[i-1][j+1])) &&
+					(utils.InBounds(i+1, j-1, lenI, lenJ) && isM(byteArr[i+1][j-1])) &&
+					(utils.InBounds(i+1, j+1, lenI, lenJ) && isS(byteArr[i+1][j+1])) {
 					result++
 				}
 
-				if (inBounds(i-1, j-1, lenI, lenJ) && isS(byteArr[i-1][j-1])) &&
-					(inBounds(i-1, j+1, lenI, lenJ) && isM(byteArr[i-1][j+1])) &&
-					(inBounds(i+1, j-1, lenI, lenJ) && isS(byteArr[i+1][j-1])) &&
-					(inBounds(i+1, j+1, lenI, lenJ) && isM(byteArr[i+1][j+1])) {
+				if (utils.InBounds(i-1, j-1, lenI, lenJ) && isS(byteArr[i-1][j-1])) &&
+					(utils.InBounds(i-1, j+1, lenI, lenJ) && isM(byteArr[i-1][j+1])) &&
+					(utils.InBounds(i+1, j-1, lenI, lenJ) && isS(byteArr[i+1][j-1])) &&
+					(utils.InBounds(i+1, j+1, lenI, lenJ) && isM(byteArr[i+1][j+1])) {
 					result++
 				}
 
-				if (inBounds(i-1, j-1, lenI, lenJ) && isS(byteArr[i-1][j-1])) &&
-					(inBounds(i-1, j+1, lenI, lenJ) && isS(byteArr[i-1][j+1])) &&
-					(inBounds(i+1, j-1, lenI, lenJ) && isM(byteArr[i+1][j-1])) &&
-					(inBounds(i+1, j+1, lenI, lenJ) && isM(byteArr[i+1][j+1])) {
+				if (utils.InBounds(i-1, j-1, lenI, lenJ) && isS(byteArr[i-1][j-1])) &&
+					(utils.InBounds(i-1, j+1, lenI, lenJ) && isS(byteArr[i-1][j+1])) &&
+					(utils.InBounds(i+1, j-1, lenI, lenJ) && isM(byteArr[i+1][j-1])) &&
+					(utils.InBounds(i+1, j+1, lenI, lenJ) && isM(byteArr[i+1][j+1])) {
 					result++
 				}
-
 			}
 		}
 	}
-
 	return result
 }
 
@@ -143,44 +121,26 @@ S - 0x53
 */
 
 func isNewLine(b byte) bool {
-	if b == 10 {
-		return true
-	}
-	return false
+	return b == 10
 }
 
 func isX(b byte) bool {
-	if b == 88 {
-		return true
-	}
-	return false
+	return b == 88
 }
 
 func isA(b byte) bool {
-	if b == 65 {
-		return true
-	}
-	return false
+	return b == 65
 }
 
 func isM(b byte) bool {
-	if b == 77 {
-		return true
-	}
-	return false
+	return b == 77
 }
 
 func isS(b byte) bool {
-	if b == 83 {
-		return true
-	}
-	return false
+	return b == 83
 }
 
-func main() {
-
-	fmt.Println("Day4 Part1 Result:", day4Part1())
-
-	fmt.Println("Day4 Part2 Result:", day4Part2())
-
+func Run(filename string) {
+	fmt.Println("Day4 Part1 Result:", day4Part1(filename))
+	fmt.Println("Day4 Part2 Result:", day4Part2(filename))
 }

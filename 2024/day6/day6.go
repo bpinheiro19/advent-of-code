@@ -1,11 +1,9 @@
-package main
+package day6
 
 import (
+	"aoc2024/utils"
 	"fmt"
-	"log"
-	"os"
 	"slices"
-	"strings"
 )
 
 /*
@@ -36,17 +34,6 @@ const (
 )
 
 const MAX_ATTEMPTS int = 10000
-
-func getStringListFromFile() []string {
-
-	input, err := os.ReadFile("input.txt")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return strings.Fields(string(input))
-}
 
 func charIsObstacle(b byte) bool {
 	return b == 35
@@ -112,18 +99,6 @@ func getGuardPosition(list []string) (int, int) {
 	return -1, -1
 }
 
-func outOfBounds(i int, j int, limitI int, limitJ int) bool {
-	return i < 0 || i >= limitI || j < 0 || j >= limitJ
-}
-
-func printBoard(list []string) {
-	fmt.Println("###################")
-	for _, str := range list {
-		fmt.Println(str)
-	}
-	fmt.Println("###################")
-}
-
 func findTotalMoves(list []string) int {
 	moves := 0
 	for i := 0; i < len(list); i++ {
@@ -143,7 +118,7 @@ func moveGuard(list []string) int {
 	dir := getDir(list[gx][gy])
 	dx, dy := getDxDy(dir)
 
-	for !outOfBounds(gx+dx, gy+dy, len(list), len(list[gx])) && attempts < MAX_ATTEMPTS {
+	for !utils.OutOfBounds(gx+dx, gy+dy, len(list), len(list[gx])) && attempts < MAX_ATTEMPTS {
 
 		if charIsObstacle(list[gx+dx][gy+dy]) {
 
@@ -151,37 +126,43 @@ func moveGuard(list []string) int {
 			dir = getDir(list[gx][gy])
 			dx, dy = getDxDy(dir)
 
-			list[gx] = string(slices.Replace([]byte(list[gx]), gy, gy+1, guard))
+			list[gx] = replaceByteInString([]byte(list[gx]), gy, guard)
 
 		} else {
 
 			guard := list[gx][gy]
 
-			list[gx] = string(slices.Replace([]byte(list[gx]), gy, gy+1, 88))
-			list[gx+dx] = string(slices.Replace([]byte(list[gx+dx]), gy+dy, gy+dy+1, guard))
+			list[gx] = markPathCrossedWithX([]byte(list[gx]), gy)
+			list[gx+dx] = replaceByteInString([]byte(list[gx+dx]), gy+dy, guard)
 
 			gx, gy = gx+dx, gy+dy
-
 		}
-
 		attempts++
 	}
 
-	list[gx] = string(slices.Replace([]byte(list[gx]), gy, gy+1, 88))
+	list[gx] = markPathCrossedWithX([]byte(list[gx]), gy)
 
 	return attempts
 }
 
-func day6Part1() int {
-	list := getStringListFromFile()
+func markPathCrossedWithX(str []byte, i int) string {
+	return string(slices.Replace(str, i, i+1, 88))
+}
+
+func replaceByteInString(str []byte, i int, val byte) string {
+	return string(slices.Replace(str, i, i+1, val))
+}
+
+func day6Part1(filename string) int {
+	list := utils.GetStringListFromFile(filename)
 	moveGuard(list)
 	return findTotalMoves(list)
 }
 
-func day6Part2() int {
+func day6Part2(filename string) int {
 	positions := 0
 
-	list := getStringListFromFile()
+	list := utils.GetStringListFromFile(filename)
 
 	for i := 0; i < len(list); i++ {
 		for n := 0; n < len(list[i]); n++ {
@@ -191,7 +172,7 @@ func day6Part2() int {
 				newList := make([]string, len(list))
 				copy(newList, list)
 
-				newList[i] = string(slices.Replace([]byte(list[i]), n, n+1, 35))
+				newList[i] = replaceByteInString([]byte(list[i]), n, 35)
 
 				attempts := moveGuard(newList)
 
@@ -205,9 +186,7 @@ func day6Part2() int {
 	return positions
 }
 
-func main() {
-
-	fmt.Println("Day6 Part1 Result:", day6Part1())
-	fmt.Println("Day6 Part2 Result:", day6Part2())
-
+func Run(filename string) {
+	fmt.Println("Day6 Part1 Result:", day6Part1(filename))
+	fmt.Println("Day6 Part2 Result:", day6Part2(filename))
 }

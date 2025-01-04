@@ -1,28 +1,15 @@
-package main
+package day5
 
 import (
+	"aoc2024/utils"
 	"fmt"
-	"log"
-	"os"
 	"slices"
-	"strconv"
 	"strings"
 )
 
-func getStringListFromFile() []string {
+func createHelperMap(filename string) map[int][]int {
 
-	input, err := os.ReadFile("input.txt")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return strings.Fields(string(input))
-}
-
-func createHelperMap() map[int][]int {
-
-	list := getStringListFromFile()
+	list := utils.GetStringListFromFile(filename)
 
 	helperMap := make(map[int][]int)
 
@@ -32,8 +19,8 @@ func createHelperMap() map[int][]int {
 
 			splitList := strings.Split(str, "|")
 
-			num1 := stringToInt(splitList[0])
-			num2 := stringToInt(splitList[1])
+			num1 := utils.StringToInt(splitList[0])
+			num2 := utils.StringToInt(splitList[1])
 
 			helperMap[num2] = append(helperMap[num2], num1)
 		}
@@ -41,16 +28,7 @@ func createHelperMap() map[int][]int {
 	return helperMap
 }
 
-func stringToInt(str string) int {
-	num, err := strconv.Atoi(str)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return num
-}
-
 func checkOrderViolation(numList []int, helperMap map[int][]int) bool {
-
 	for i := 0; i < len(numList); i++ {
 		for n := i + 1; n < len(numList); n++ {
 			if isInArray(helperMap[numList[i]], numList[n]) {
@@ -58,7 +36,6 @@ func checkOrderViolation(numList []int, helperMap map[int][]int) bool {
 			}
 		}
 	}
-
 	return false
 }
 
@@ -74,13 +51,13 @@ func removeFromArray(arr []int, i int) []int {
 	return append(arr[:i], arr[i+1:]...)
 }
 
-func day5() (int, int) {
+func day5(filename string) (int, int) {
 	result1 := 0
 	result2 := 0
 
-	list := getStringListFromFile()
+	list := utils.GetStringListFromFile(filename)
 
-	helperMap := createHelperMap()
+	helperMap := createHelperMap(filename)
 
 	for _, str := range list {
 
@@ -90,7 +67,7 @@ func day5() (int, int) {
 			numList := make([]int, 0)
 			for i := range splitList {
 
-				n := stringToInt(splitList[i])
+				n := utils.StringToInt(splitList[i])
 
 				numList = append(numList, n)
 			}
@@ -128,10 +105,8 @@ func day5Part2(numList []int, helperMap map[int][]int) int {
 	return result
 }
 
-func main() {
-
-	part1, part2 := day5()
+func Run(filename string) {
+	part1, part2 := day5(filename)
 	fmt.Println("Day5 Part1 Result:", part1)
 	fmt.Println("Day5 Part2 Result:", part2)
-
 }
