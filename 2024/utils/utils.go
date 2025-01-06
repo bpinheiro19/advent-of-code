@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"regexp"
@@ -52,4 +53,12 @@ func StringToInt(str string) int {
 
 func ConcatenateTwoInts(a, b int) int {
 	return StringToInt(strings.Join([]string{strconv.Itoa(a), strconv.Itoa(b)}, ""))
+}
+
+func PrintBoard(list []string) {
+	fmt.Println("###################")
+	for _, str := range list {
+		fmt.Println(str)
+	}
+	fmt.Println("###################")
 }
