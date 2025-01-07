@@ -17,7 +17,7 @@ func TestDay8Part1Example(t *testing.T) {
 
 func TestDay8Part2Example(t *testing.T) {
 	result := day8Part2(TEST_FILENAME)
-	expectedResult := 0
+	expectedResult := 34
 	if result != expectedResult {
 		t.Errorf("Result was incorrect, got: %d, wanted: %d.", result, expectedResult)
 	}
@@ -33,7 +33,7 @@ func TestDay8Part1(t *testing.T) {
 
 func TestDay8Part2(t *testing.T) {
 	result := day8Part2(FILENAME)
-	expectedResult := 0
+	expectedResult := 766
 	if result != expectedResult {
 		t.Errorf("Result was incorrect, got: %d, wanted: %d.", result, expectedResult)
 	}
