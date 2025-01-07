@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -53,6 +54,10 @@ func StringToInt(str string) int {
 
 func ConcatenateTwoInts(a, b int) int {
 	return StringToInt(strings.Join([]string{strconv.Itoa(a), strconv.Itoa(b)}, ""))
+}
+
+func ReplaceByteInString(str []byte, i int, val byte) string {
+	return string(slices.Replace(str, i, i+1, val))
 }
 
 func PrintBoard(list []string) {
