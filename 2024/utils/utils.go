@@ -67,3 +67,7 @@ func PrintBoard(list []string) {
 	}
 	fmt.Println("###################")
 }
+
+func ByteToInt(b byte) int {
+	return int(b - 48)
+}
