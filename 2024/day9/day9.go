@@ -5,27 +5,31 @@ import (
 	"fmt"
 )
 
-func createDiskBlock(filename string) []int {
+func createDiskBlock(filename string) ([]int, map[int]int) {
 	fileId := 0
 
 	diskList := utils.GetByteListFromFile(filename)
 	fileList := make([]int, 0)
+	helperMap := make(map[int]int)
 
 	for i := 0; i < len(diskList); i++ {
 
+		len := utils.ByteToInt(diskList[i])
 		if i%2 == 0 {
-			for j := 0; j < utils.ByteToInt(diskList[i]); j++ {
+			for j := 0; j < len; j++ {
 				fileList = append(fileList, fileId)
 			}
+
+			helperMap[fileId] = len
 			fileId++
 
 		} else {
-			for j := 0; j < utils.ByteToInt(diskList[i]); j++ {
+			for j := 0; j < len; j++ {
 				fileList = append(fileList, -1)
 			}
 		}
 	}
-	return fileList
+	return fileList, helperMap
 }
 
 func findRightMostFileIndex(fileList []int) int {
@@ -37,7 +41,7 @@ func findRightMostFileIndex(fileList []int) int {
 	return -1
 }
 
-func shiftBlocksLeft(fileList []int) []int {
+func shiftBlocksLeftPart1(fileList []int) []int {
 
 	index := findRightMostFileIndex(fileList)
 
@@ -70,16 +74,71 @@ func findCheckSum(fileList []int) int {
 
 func day9Part1(filename string) int {
 
-	fileList := createDiskBlock(filename)
+	fileList, _ := createDiskBlock(filename)
 
-	fileList = shiftBlocksLeft(fileList)
+	fileList = shiftBlocksLeftPart1(fileList)
 
 	return findCheckSum(fileList)
 }
 
+func findFreeSpace(fileList []int, size int) (int, int) {
+	beg, end := -1, -1
+	for i := 0; i < len(fileList); i++ {
+		if fileList[i] == -1 {
+			if beg == -1 {
+				beg = i
+				end = i
+			} else {
+				end++
+			}
+
+		} else {
+			if beg != -1 && end != -1 && end-beg+1 >= size {
+				return beg, end
+			} else {
+				beg, end = -1, -1
+			}
+		}
+	}
+	return -1, -1
+}
+
+func findFileIdIndex(fileList []int, fileId int) int {
+	for i := len(fileList) - 1; i >= 0; i-- {
+		if fileList[i] == fileId {
+			return i
+		}
+	}
+	return -1
+}
+
+func shiftBlocksLeftPart2(fileList []int, helperMap map[int]int) []int {
+
+	for i := len(helperMap) - 1; i >= 0; i-- {
+
+		fileId, fileSize := i, helperMap[i]
+		beg, end := findFreeSpace(fileList, fileSize)
+		index := findFileIdIndex(fileList, fileId)
+
+		if beg != -1 && end != -1 && beg < index {
+
+			for j := 0; j < fileSize; j++ {
+				fileList[beg+j] = fileId
+				fileList[index-j] = -1
+			}
+
+		}
+	}
+
+	return fileList
+}
+
 func day9Part2(filename string) int {
-	result := 0
-	return result
+	fileList, helperMap := createDiskBlock(filename)
+
+	fileList = shiftBlocksLeftPart2(fileList, helperMap)
+
+	return findCheckSum(fileList)
 }
 
 func Run(filename string) {
