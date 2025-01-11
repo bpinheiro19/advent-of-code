@@ -12,14 +12,14 @@ func createByteArray(filename string) [][]byte {
 	byteArr := make([][]byte, 0)
 	lineArr := make([]byte, 0)
 
-	for _, ele := range input {
+	for _, b := range input {
 
-		if isNewLine(ele) {
+		if utils.ByteIsNewLine(b) {
 			byteArr = append(byteArr, lineArr)
 			lineArr = make([]byte, 0)
 
 		} else {
-			lineArr = append(lineArr, ele)
+			lineArr = append(lineArr, b)
 		}
 
 	}
@@ -119,10 +119,6 @@ M - 0x4D
 A - 0x41
 S - 0x53
 */
-
-func isNewLine(b byte) bool {
-	return b == 10
-}
 
 func isX(b byte) bool {
 	return b == 88

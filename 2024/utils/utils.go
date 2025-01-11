@@ -71,3 +71,7 @@ func PrintBoard(list []string) {
 func ByteToInt(b byte) int {
 	return int(b - 48)
 }
+
+func ByteIsNewLine(b byte) bool {
+	return b == 10
+}
