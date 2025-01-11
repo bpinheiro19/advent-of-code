@@ -142,6 +142,6 @@ func day9Part2(filename string) int {
 }
 
 func Run(filename string) {
-	fmt.Println("Day8 Part1 Result:", day9Part1(filename))
-	fmt.Println("Day8 Part2 Result:", day9Part2(filename))
+	fmt.Println("Day9 Part1 Result:", day9Part1(filename))
+	fmt.Println("Day9 Part2 Result:", day9Part2(filename))
 }
