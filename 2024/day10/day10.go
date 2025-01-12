@@ -71,9 +71,10 @@ func findTrailHeadScore(intList [][]int, x, y, w, z int) int {
 	return score
 }
 
-func day10Part1(filename string) int {
+func day10(filename string) (int, int) {
+	resultPart1 := 0
+	resultPart2 := 0
 
-	result := 0
 	intList := createIntList(filename)
 	zeroPosList, ninePosList := createPositionList(intList)
 
@@ -83,19 +84,20 @@ func day10Part1(filename string) int {
 		for j := 0; j < len(ninePosList); j++ {
 			w, z := ninePosList[j][0], ninePosList[j][1]
 
-			if findTrailHeadScore(intList, x, y, w, z) > 0 {
-				result++
+			result := findTrailHeadScore(intList, x, y, w, z)
+
+			if result > 0 {
+				resultPart1++
 			}
+
+			resultPart2 += result
 		}
 	}
-	return result
-}
-
-func day10Part2(filename string) int {
-	return 0
+	return resultPart1, resultPart2
 }
 
 func Run(filename string) {
-	fmt.Println("Day10 Part1 Result:", day10Part1(filename))
-	fmt.Println("Day10 Part2 Result:", day10Part2(filename))
+	part1, part2 := day10(filename)
+	fmt.Println("Day10 Part1 Result:", part1)
+	fmt.Println("Day10 Part2 Result:", part2)
 }
