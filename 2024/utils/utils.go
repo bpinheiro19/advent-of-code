@@ -52,6 +52,14 @@ func StringToInt(str string) int {
 	return num
 }
 
+func ByteListToInt(bytelist []byte) int {
+	return StringToInt(string(bytelist))
+}
+
+func IntToString(i int) string {
+	return strconv.Itoa(i)
+}
+
 func ConcatenateTwoInts(a, b int) int {
 	return StringToInt(strings.Join([]string{strconv.Itoa(a), strconv.Itoa(b)}, ""))
 }

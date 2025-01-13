@@ -2,6 +2,8 @@ package main
 
 import (
 	"aoc2024/day1"
+	"aoc2024/day10"
+	"aoc2024/day11"
 	"aoc2024/day2"
 	"aoc2024/day3"
 	"aoc2024/day4"
@@ -22,4 +24,6 @@ func main() {
 	day7.Run("day7/input.txt")
 	day8.Run("day8/input.txt")
 	day9.Run("day9/input.txt")
+	day10.Run("day10/input.txt")
+	day11.Run("day11/input.txt")
 }
