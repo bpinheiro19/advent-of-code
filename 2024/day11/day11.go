@@ -3,39 +3,32 @@ package day11
 import (
 	"aoc2024/utils"
 	"fmt"
-	"slices"
 )
 
 type Stone struct {
 	val int
 }
 
-func blink(stoneList []*Stone) []*Stone {
+func blink(stoneList *[]*Stone) {
+	for _, st := range *stoneList {
+		if st.val == 0 {
+			st.val = 1
 
-	for i := 0; i < len(stoneList); i++ {
-
-		if stoneList[i].val == 0 {
-			stoneList[i].val = 1
-
-		} else if len(utils.IntToString(stoneList[i].val))%2 == 0 {
-
-			bs := []byte(utils.IntToString(stoneList[i].val))
+		} else if len(utils.IntToString(st.val))%2 == 0 {
+			bs := []byte(utils.IntToString(st.val))
 			halfLen := len(bs) / 2
 
-			stoneList[i].val = utils.ByteListToInt(bs[halfLen:])
+			st.val = utils.ByteListToInt(bs[halfLen:])
 			stone := &Stone{utils.ByteListToInt(bs[:halfLen])}
 
-			stoneList = slices.Insert(stoneList, i, stone)
-			i++
+			*stoneList = append(*stoneList, stone)
 		} else {
-			stoneList[i].val *= 2024
+			st.val *= 2024
 		}
 	}
-	return stoneList
 }
 
 func createStoneList(filename string) []*Stone {
-
 	stringList := utils.GetStringListFromFile(filename)
 	stoneList := make([]*Stone, 0)
 
@@ -51,7 +44,7 @@ func day11Part1(filename string) int {
 	stoneList := createStoneList(filename)
 
 	for i := 0; i < 25; i++ {
-		stoneList = blink(stoneList)
+		blink(&stoneList)
 	}
 
 	return len(stoneList)

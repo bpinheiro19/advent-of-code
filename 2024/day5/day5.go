@@ -3,7 +3,6 @@ package day5
 import (
 	"aoc2024/utils"
 	"fmt"
-	"slices"
 	"strings"
 )
 
@@ -31,16 +30,12 @@ func createHelperMap(filename string) map[int][]int {
 func checkOrderViolation(numList []int, helperMap map[int][]int) bool {
 	for i := 0; i < len(numList); i++ {
 		for n := i + 1; n < len(numList); n++ {
-			if isInArray(helperMap[numList[i]], numList[n]) {
+			if utils.IsInArray(helperMap[numList[i]], numList[n]) {
 				return true
 			}
 		}
 	}
 	return false
-}
-
-func isInArray(arr []int, i int) bool {
-	return slices.Index(arr, i) != -1
 }
 
 func insertIntoArray(arr []int, i int, e int) []int {
@@ -90,7 +85,7 @@ func day5Part2(numList []int, helperMap map[int][]int) int {
 
 	for i := 0; i < len(numList); i++ {
 		for n := i + 1; n < len(numList); n++ {
-			if isInArray(helperMap[numList[i]], numList[n]) {
+			if utils.IsInArray(helperMap[numList[i]], numList[n]) {
 				e := numList[n]
 				removeFromArray(numList, n)
 				insertIntoArray(numList, i, e)

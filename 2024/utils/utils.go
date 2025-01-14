@@ -83,3 +83,7 @@ func ByteToInt(b byte) int {
 func ByteIsNewLine(b byte) bool {
 	return b == 10
 }
+
+func IsInArray[S ~[]E, E comparable](s S, v E) bool {
+	return slices.Index(s, v) != -1
+}
