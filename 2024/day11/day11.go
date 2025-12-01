@@ -1,8 +1,9 @@
 package day11
 
 import (
-	"aoc2024/utils"
 	"fmt"
+
+	"github.com/bpinheiro19/advent-of-code/utils"
 )
 
 type Stone struct {

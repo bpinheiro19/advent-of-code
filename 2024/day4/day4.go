@@ -1,8 +1,9 @@
 package day4
 
 import (
-	"aoc2024/utils"
 	"fmt"
+
+	"github.com/bpinheiro19/advent-of-code/utils"
 )
 
 func createByteArray(filename string) [][]byte {

@@ -1,9 +1,10 @@
 package day1
 
 import (
-	"aoc2024/utils"
 	"fmt"
 	"sort"
+
+	"github.com/bpinheiro19/advent-of-code/utils"
 )
 
 func createNumLists(filename string) ([]int, []int) {

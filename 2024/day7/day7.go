@@ -1,9 +1,10 @@
 package day7
 
 import (
-	"aoc2024/utils"
 	"fmt"
 	"log"
+
+	"github.com/bpinheiro19/advent-of-code/utils"
 )
 
 func createIntList(filename string) [][]int {

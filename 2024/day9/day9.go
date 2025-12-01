@@ -1,8 +1,9 @@
 package day9
 
 import (
-	"aoc2024/utils"
 	"fmt"
+
+	"github.com/bpinheiro19/advent-of-code/utils"
 )
 
 func createDiskBlock(filename string) ([]int, map[int]int) {
