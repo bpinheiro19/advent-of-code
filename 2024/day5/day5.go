@@ -1,9 +1,10 @@
 package day5
 
 import (
-	"aoc2024/utils"
 	"fmt"
 	"strings"
+
+	"github.com/bpinheiro19/advent-of-code/utils"
 )
 
 func createHelperMap(filename string) map[int][]int {

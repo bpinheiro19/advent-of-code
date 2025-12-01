@@ -3,7 +3,7 @@ package day8
 import (
 	"fmt"
 
-	"aoc2024/utils"
+	"github.com/bpinheiro19/advent-of-code/utils"
 )
 
 func createCoordinatesMapMap(list []string) map[byte][][]int {

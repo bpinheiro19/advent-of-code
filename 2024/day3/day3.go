@@ -1,9 +1,10 @@
 package day3
 
 import (
-	"aoc2024/utils"
 	"fmt"
 	"strings"
+
+	"github.com/bpinheiro19/advent-of-code/utils"
 )
 
 func multiplyValues(mul string) int {

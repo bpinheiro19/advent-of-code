@@ -1,9 +1,10 @@
 package day6
 
 import (
-	"aoc2024/utils"
 	"fmt"
 	"slices"
+
+	"github.com/bpinheiro19/advent-of-code/utils"
 )
 
 /*

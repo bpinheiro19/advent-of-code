@@ -1,12 +1,13 @@
 package day2
 
 import (
-	"aoc2024/utils"
 	"bufio"
 	"fmt"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/bpinheiro19/advent-of-code/utils"
 )
 
 func getListFromFile(file string) [][]string {
