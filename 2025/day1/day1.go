@@ -20,14 +20,12 @@ func day1Part1(filename string) int {
 			dial -= num
 			for dial < 0 {
 				dial += 100
-				result++
 			}
 
 		case 'R':
 			dial += num
 			for dial > 99 {
 				dial -= 100
-				result++
 			}
 		}
 
@@ -40,7 +38,39 @@ func day1Part1(filename string) int {
 
 func day1Part2(filename string) int {
 	result := 0
+	dial := 50
 
+	strInput := utils.GetStringListFromFile(filename)
+
+	for _, v := range strInput {
+		num := utils.StringToInt(v[1:])
+
+		switch v[0] {
+		case 'L':
+			if dial == 0 {
+				result--
+			}
+
+			dial -= num
+
+			for dial != 0 && dial < 0 {
+				dial += 100
+				result++
+			}
+
+			if dial == 0 {
+				result++
+			}
+
+		case 'R':
+			dial += num
+
+			for dial > 99 {
+				dial -= 100
+				result++
+			}
+		}
+	}
 	return result
 }
 
