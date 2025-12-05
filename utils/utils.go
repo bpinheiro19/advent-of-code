@@ -16,12 +16,14 @@ func GetStringListFromFile(filename string) []string {
 
 func GetByteListFromFile(filename string) []byte {
 	input, err := os.ReadFile(filename)
-
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	return input
+}
+
+func GetStringListFromCSV(filename string) []string {
+	return strings.Split(strings.Join(GetStringListFromFile(filename), ""), ",")
 }
 
 func InBounds(i int, j int, limitI int, limitJ int) bool {
