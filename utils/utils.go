@@ -14,6 +14,10 @@ func GetStringListFromFile(filename string) []string {
 	return strings.Fields(string(GetByteListFromFile(filename)))
 }
 
+func GetStringListFromCSV(filename string) []string {
+	return strings.Split(strings.Join(GetStringListFromFile(filename), ""), ",")
+}
+
 func GetByteListFromFile(filename string) []byte {
 	input, err := os.ReadFile(filename)
 	if err != nil {
@@ -22,8 +26,26 @@ func GetByteListFromFile(filename string) []byte {
 	return input
 }
 
-func GetStringListFromCSV(filename string) []string {
-	return strings.Split(strings.Join(GetStringListFromFile(filename), ""), ",")
+func CreateByte2DArray(filename string) [][]byte {
+
+	input := GetByteListFromFile(filename)
+
+	byteArr := make([][]byte, 0)
+	lineArr := make([]byte, 0)
+
+	for _, b := range input {
+
+		if ByteIsNewLine(b) {
+			byteArr = append(byteArr, lineArr)
+			lineArr = make([]byte, 0)
+
+		} else {
+			lineArr = append(lineArr, b)
+		}
+	}
+	byteArr = append(byteArr, lineArr)
+
+	return byteArr
 }
 
 func InBounds(i int, j int, limitI int, limitJ int) bool {

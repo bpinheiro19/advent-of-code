@@ -6,32 +6,9 @@ import (
 	"github.com/bpinheiro19/advent-of-code/utils"
 )
 
-func createByteArray(filename string) [][]byte {
-
-	input := utils.GetByteListFromFile(filename)
-
-	byteArr := make([][]byte, 0)
-	lineArr := make([]byte, 0)
-
-	for _, b := range input {
-
-		if utils.ByteIsNewLine(b) {
-			byteArr = append(byteArr, lineArr)
-			lineArr = make([]byte, 0)
-
-		} else {
-			lineArr = append(lineArr, b)
-		}
-
-	}
-	byteArr = append(byteArr, lineArr)
-
-	return byteArr
-}
-
 func day4Part1(filename string) int {
 	result := 0
-	byteArr := createByteArray(filename)
+	byteArr := utils.CreateByte2DArray(filename)
 
 	lenI := len(byteArr)
 	for i := 0; i < lenI; i++ {
@@ -71,7 +48,7 @@ S.S M.S S.M M.M
 
 func day4Part2(filename string) int {
 	result := 0
-	byteArr := createByteArray(filename)
+	byteArr := utils.CreateByte2DArray(filename)
 
 	lenI := len(byteArr)
 	for i := 0; i < lenI; i++ {
