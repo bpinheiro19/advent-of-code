@@ -2,6 +2,7 @@ package day5
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 	"strings"
 
@@ -23,8 +24,9 @@ func (database *Database) createRange(min int, max int) {
 	database.ingredientRange = append(database.ingredientRange, *rg)
 }
 
-func (database *Database) createDatabase(input [][]byte) [][]byte {
+func (database *Database) createDatabase(filename string) [][]byte {
 	database.ingredientRange = make([]Range, 0)
+	input := utils.CreateByte2DArray(filename)
 
 	for i, b := range input {
 		if len(b) == 0 {
@@ -33,7 +35,7 @@ func (database *Database) createDatabase(input [][]byte) [][]byte {
 		str := strings.Split(string(b), "-")
 		database.createRange(int(utils.StringToInt(str[0])), int(utils.StringToInt(str[1])))
 	}
-	return [][]byte{}
+	return input
 }
 
 func (database *Database) sortDatabase() {
@@ -55,20 +57,40 @@ func (database *Database) findFreshItems(input [][]byte) {
 	}
 }
 
-func day5Part1(filename string) int {
-	input := utils.CreateByte2DArray(filename)
+func (database *Database) countTotalFreshItems() {
+	for i := 0; i < len(database.ingredientRange)-1; i++ {
 
+		if database.ingredientRange[i].max+1 >= database.ingredientRange[i+1].min {
+
+			database.ingredientRange[i+1].min = database.ingredientRange[i].min
+
+			if database.ingredientRange[i].max > database.ingredientRange[i+1].max {
+				database.ingredientRange[i+1].max = database.ingredientRange[i].max
+			}
+			database.ingredientRange = slices.Delete(database.ingredientRange, i, i+1)
+			i--
+		}
+	}
+
+	for i := 0; i < len(database.ingredientRange); i++ {
+		database.freshItems += database.ingredientRange[i].max - database.ingredientRange[i].min + 1
+	}
+}
+
+func day5Part1(filename string) int {
 	database := &Database{}
-	input = database.createDatabase(input)
+	input := database.createDatabase(filename)
 	database.sortDatabase()
 	database.findFreshItems(input)
-
 	return database.freshItems
 }
 
 func day5Part2(filename string) int {
-	result := 0
-	return result
+	database := &Database{}
+	database.createDatabase(filename)
+	database.sortDatabase()
+	database.countTotalFreshItems()
+	return database.freshItems
 }
 
 func Run(filename string) {

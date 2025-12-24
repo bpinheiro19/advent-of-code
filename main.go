@@ -13,6 +13,10 @@ import (
 	day8_24 "github.com/bpinheiro19/advent-of-code/2024/day8"
 	day9_24 "github.com/bpinheiro19/advent-of-code/2024/day9"
 	day1_25 "github.com/bpinheiro19/advent-of-code/2025/day1"
+	day2_25 "github.com/bpinheiro19/advent-of-code/2025/day2"
+	day3_25 "github.com/bpinheiro19/advent-of-code/2025/day3"
+	day4_25 "github.com/bpinheiro19/advent-of-code/2025/day4"
+	day5_25 "github.com/bpinheiro19/advent-of-code/2025/day5"
 )
 
 func main() {
@@ -20,7 +24,11 @@ func main() {
 }
 
 func AOC2025() {
-	day1_25.Run("2025/day1/test-input.txt")
+	day1_25.Run("2025/day1/input.txt")
+	day2_25.Run("2025/day2/input.txt")
+	day3_25.Run("2025/day3/input.txt")
+	day4_25.Run("2025/day4/input.txt")
+	day5_25.Run("2025/day5/input.txt")
 }
 
 func AOC2024() {

@@ -14,7 +14,7 @@ func TestDay5Part1Example(t *testing.T) {
 
 func TestDay5Part2Example(t *testing.T) {
 	result := day5Part2("test_input.txt")
-	expectedResult := 0
+	expectedResult := 14
 	if result != expectedResult {
 		t.Errorf("Result was incorrect, got: %d, wanted: %d.", result, expectedResult)
 	}
@@ -30,7 +30,7 @@ func TestDay5Part1(t *testing.T) {
 
 func TestDay5Part2(t *testing.T) {
 	result := day5Part2("input.txt")
-	expectedResult := 0
+	expectedResult := 348115621205535
 	if result != expectedResult {
 		t.Errorf("Result was incorrect, got: %d, wanted: %d.", result, expectedResult)
 	}
