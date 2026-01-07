@@ -83,9 +83,37 @@ func day6Part1(filename string) int {
 	return math.resolveProblem()
 }
 
+func (math *Math) createOperations2(filename string) {
+	byteArr := utils.CreateByte2DArray(filename)
+
+	math.operations = make([]Operation, 0)
+	operation := &Operation{}
+	operation.nums = make([]int, 0)
+
+	for j := len(byteArr[0]) - 1; j >= 0; j-- {
+		num := ""
+		for i := 0; i < len(byteArr)-1; i++ {
+			if byteArr[i][j] != 32 {
+				num = strings.Join([]string{num, string(byteArr[i][j])}, "")
+			}
+		}
+
+		if num != "" {
+			operation.nums = append(operation.nums, utils.StringToInt(num))
+		}
+
+		if byteArr[len(byteArr)-1][j] == '+' || byteArr[len(byteArr)-1][j] == '*' {
+			operation.operator = byteArr[len(byteArr)-1][j]
+			math.operations = append(math.operations, *operation)
+			operation.nums = nil
+		}
+	}
+}
+
 func day6Part2(filename string) int {
-	result := 0
-	return result
+	math := &Math{}
+	math.createOperations2(filename)
+	return math.resolveProblem()
 }
 
 func Run(filename string) {
